@@ -1,0 +1,48 @@
+<server description="DMT">
+
+	<!-- Enable features -->
+	<featureManager>
+		<feature>jsf-2.2</feature>
+		<feature>localConnector-1.0</feature>
+		<feature>servlet-3.1</feature>
+		<feature>jaxrs-2.0</feature>
+		<feature>jdbc-4.1</feature>
+		<feature>jpa-2.2</feature>
+	</featureManager>
+
+
+	<!-- Performance -->
+	<httpOptions maxKeepAliveRequests="-1" />
+
+
+	<applicationMonitor dropins="dropins"
+		dropinsEnabled="true" pollingRate="500ms" updateTrigger="mbean" />
+
+	<executor coreThreads="40" keepAlive="60s" maxThreads="80"
+		name="LargeThreadPool" rejectedWorkPolicy="CALLER_RUNS" stealPolicy="STRICT" />
+
+	<!-- To access this server from a remote client add a host attribute to 
+		the following element, e.g. host="*" -->
+	<httpAccessLogging id="accessLogging" />
+
+	<httpEndpoint accessLoggingRef="accessLogging" httpPort="8080"
+		httpsPort="8443" id="defaultHttpEndpoint" host="*" />
+
+	<!-- Automatically expand WAR files and EAR files -->
+	<applicationManager autoExpand="true" />
+
+	<logging consoleLogLevel="AUDIT" traceFormat="ADVANCED" />
+	<logging maxFileSize="20" maxFiles="10" traceFileName="trace.log"
+		traceFormat="ADVANCED" traceSpecification="eclipselink.sql=all" />
+
+	<library id="libs">
+		<!-- All the jar files in the servers lib folder -->
+		<fileset dir="${server.config.dir}/lib" includes="*.jar"
+			scanInterval="5s" />
+	</library>
+
+	<webApplication id="dmt-web" location="dmt-web.war"
+		name="dmt-web">
+<!-- 		<classloader commonLibraryRef="libs" /> -->
+	</webApplication>
+</server>
